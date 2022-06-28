@@ -72,17 +72,7 @@ function Widget() {
         ({propertyName, propertyValue}) => {
             if (propertyName === "setTagText") {
                 return new Promise((resolve) => {
-                    figma.showUI(`
-            <input id="tag" type="text" placeholder="Tag text">
-            <button id="submit">Submit</button>
-            <script>
-              document.getElementById('submit').onclick = () => {
-                const textbox = document.getElementById('tag')
-                const tag = textbox.value
-                const message = { pluginMessage: {type: 'tag', tag} }
-                parent.postMessage(message, '*')
-              }
-            </script>`)
+                    figma.showUI(__html__)
                 })
 
             } else if (propertyName == "colors") {

@@ -1,0 +1,11 @@
+<input id="tag" type="text" placeholder="Tag text">
+<button id="submit">Submit</button>
+
+<script>
+    document.getElementById('submit').onclick = () => {
+        const textbox = document.getElementById('tag')
+        const tag = textbox.value
+        const message = {pluginMessage: {type: 'tag', tag}}
+        parent.postMessage(message, '*')
+    }
+</script>
