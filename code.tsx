@@ -7,27 +7,52 @@ function Widget() {
     useStickable()
     const [tag, setTag] = useSyncedState('Tag text', 'Enter text for tag')
 
-    const radiusOptions = [{option: '0', label: 'None'}, {option: '8', label: 'Slightly'}, {
-        option: '400',
-        label: 'Round'
-    }]
+    const radiusOptions = [
+        {option: '0', label: 'None'},
+        {option: '8', label: 'Slightly'},
+        {option: '400', label: 'Round'}
+    ]
     const [radius, setRadius] = useSyncedState('Radius', '400')
 
-    const colors = [{option: '#ffffff', tooltip: 'White'}, {option: '#FFC7C2', tooltip: 'Light red'}, {
-        option: '#FCD19C',
-        tooltip: 'Light orange'
-    }, {option: '#FFE8A3', tooltip: 'Light yellow'}, {option: '#AFF4C6', tooltip: 'Light green'}, {
-        option: '#BDE3FF',
-        tooltip: 'Light blue'
-    }, {option: '#E4CCFF', tooltip: 'Light purple'},
-        {option: '#F24822', tooltip: 'Red'}, {option: '#FFA629', tooltip: 'Orange'}, {
-            option: '#FFCD29',
-            tooltip: 'Yellow'
-        }, {option: '#14AE5C', tooltip: 'Green'}, {option: '#0D99FF', tooltip: 'Blue'}, {
-            option: '#9747FF',
-            tooltip: 'Purple'
-        }, {option: '#000000', tooltip: 'Black'}]
+    const colors = [
+        {option: '#ffffff', tooltip: 'White'},
+        {option: '#FFC7C2', tooltip: 'Light red'},
+        {option: '#FCD19C', tooltip: 'Light orange'},
+        {option: '#FFE8A3', tooltip: 'Light yellow'},
+        {option: '#AFF4C6', tooltip: 'Light green'},
+        {option: '#BDE3FF', tooltip: 'Light blue'},
+        {option: '#E4CCFF', tooltip: 'Light purple'},
+        {option: '#F24822', tooltip: 'Red'},
+        {option: '#FFA629', tooltip: 'Orange'},
+        {option: '#FFCD29', tooltip: 'Yellow'},
+        {option: '#14AE5C', tooltip: 'Green'},
+        {option: '#0D99FF', tooltip: 'Blue'},
+        {option: '#9747FF', tooltip: 'Purple'},
+        {option: '#000000', tooltip: 'Black'}
+    ]
     const [color, setColor] = useSyncedState('Color', colors[0].option)
+
+    const emojis = [
+        {option: 'None', label: 'None'},
+        {option: '👍', label: '👍'},
+        {option: '👎', label: '👎'},
+        {option: '❤', label: '❤'},
+        {option: '💯', label: '💯'},
+        {option: '❓', label: '❓'},
+        {option: '❗', label: '❗'},
+        {option: '✔', label: '✔'},
+        {option: '❌', label: '❌'},
+        {option: '🆕', label: '🆕'},
+        {option: '😀', label: '😀'},
+        {option: '🙁', label: '🙁'},
+        {option: '😮', label: '😮'},
+        {option: '😱', label: '😱'},
+        {option: '💀', label: '💀'},
+        {option: '💩', label: '💩'},
+        {option: '🤖', label: '🤖'},
+        {option: '👏', label: '👏'},
+    ]
+    const [emoji, setEmoji] = useSyncedState('Emoji', emojis[0].option)
 
     useEffect(() => {
         figma.ui.onmessage = (message) => {
@@ -40,6 +65,16 @@ function Widget() {
 
     usePropertyMenu(
         [
+            {
+                itemType: 'dropdown',
+                propertyName: 'emoji',
+                tooltip: 'Emoji selector',
+                selectedOption: emoji,
+                options: emojis,
+            },
+            {
+                itemType: 'separator',
+            },
             {
                 itemType: 'action',
                 tooltip: 'Edit text',
@@ -67,20 +102,22 @@ function Widget() {
             },
         ],
         ({propertyName, propertyValue}) => {
-            if (propertyName === "setTagText") {
+            if (propertyName === "emoji") {
+                setEmoji(propertyValue)
+            } else if (propertyName === "setTagText") {
                 return new Promise((resolve) => {
                     figma.showUI(__html__);
-                    figma.ui.resize(300,104)
+                    figma.ui.resize(300, 104)
                 })
 
-            } else if (propertyName == "colors") {
+            } else if (propertyName === "colors") {
                 setColor(propertyValue)
-            } else if (propertyName == "radius") {
+            } else if (propertyName === "radius") {
                 setRadius(propertyValue)
             }
         },
     )
-
+    console.log("Emoji is ", emoji)
     return (
         <AutoLayout
             verticalAlignItems={'center'}
@@ -89,6 +126,9 @@ function Widget() {
             cornerRadius={parseInt(radius)}
             fill={color}
         >
+            <Text hidden={emoji === 'None'}>
+                {emoji}
+            </Text>
             <Text
                 fill={color == '#000000' ? '#ffffff' : '#000000'}
             >
