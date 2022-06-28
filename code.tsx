@@ -6,12 +6,25 @@ const {useSyncedState, usePropertyMenu, AutoLayout, Text, useStickable, useEffec
 function Widget() {
     useStickable()
     const [tag, setTag] = useSyncedState('Tag text', 'Enter text for tag')
-    const colors = [{option: '#FFC7C2', tooltip: 'Red'}, {option: '#FCD19C', tooltip: 'Orange'}, {
-        option: '#FFE8A3', tooltip: 'Yellow'
-    }, {option: '#AFF4C6', tooltip: 'Green'}, {option: '#BDE3FF', tooltip: 'Blue'},
-        {option: '#E4CCFF', tooltip: 'Purple'},]
+    const colors = [{option: '#ffffff', tooltip: 'White'}, {option: '#FFC7C2', tooltip: 'Light red'}, {
+        option: '#FCD19C',
+        tooltip: 'Light orange'
+    }, {option: '#FFE8A3', tooltip: 'Light yellow'}, {option: '#AFF4C6', tooltip: 'Light green'}, {
+        option: '#BDE3FF',
+        tooltip: 'Light blue'
+    }, {option: '#E4CCFF', tooltip: 'Light purple'},
+        {option: '#F24822', tooltip: 'Red'}, {option: '#FFA629', tooltip: 'Orange'}, {
+            option: '#FFCD29',
+            tooltip: 'Yellow'
+        }, {option: '#14AE5C', tooltip: 'Green'}, {option: '#0D99FF', tooltip: 'Blue'}, {
+            option: '#9747FF',
+            tooltip: 'Purple'
+        }, {option: '#000000', tooltip: 'Black'}]
 
-    const radiusOptions = [{option: '0', label: 'None'}, {option: '8', label: 'Slightly'}, {option: '400', label: 'Round'}]
+    const radiusOptions = [{option: '0', label: 'None'}, {option: '8', label: 'Slightly'}, {
+        option: '400',
+        label: 'Round'
+    }]
     const [radius, setRadius] = useSyncedState('Radius', '400')
 
     const [color, setColor] = useSyncedState('Color', colors[0].option)
@@ -92,6 +105,7 @@ function Widget() {
             fill={color}
         >
             <Text
+                fill={color == '#000000' ? '#ffffff' : '#000000'}
             >
                 {tag}
             </Text>
