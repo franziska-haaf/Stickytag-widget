@@ -56,6 +56,9 @@ function Widget() {
                 options: radiusOptions,
             },
             {
+                itemType: 'separator',
+            },
+            {
                 itemType: 'color-selector',
                 propertyName: 'colors',
                 tooltip: 'Color selector',
