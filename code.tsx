@@ -42,7 +42,7 @@ function Widget() {
         [
             {
                 itemType: 'action',
-                tooltip: 'Set tag text',
+                tooltip: 'Edit text',
                 propertyName: 'setTagText'
             },
             {
@@ -66,7 +66,8 @@ function Widget() {
         ({propertyName, propertyValue}) => {
             if (propertyName === "setTagText") {
                 return new Promise((resolve) => {
-                    figma.showUI(__html__)
+                    figma.showUI(__html__);
+                    figma.ui.resize(300,104)
                 })
 
             } else if (propertyName == "colors") {
