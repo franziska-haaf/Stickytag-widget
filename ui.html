@@ -1,12 +1,15 @@
 <meta charset="UTF-8">
 <div class="wrapper">
-    <input id="tag" type="text" placeholder="Tag text">
+    <input id="tag" type="text" placeholder="Tag text" autofocus>
     <div><button id="submit">Save</button></div>
 </div>
 
 <script>
+    const textbox = document.getElementById('tag')
+    textbox.focus()
+
     document.getElementById('submit').onclick = () => {
-        const textbox = document.getElementById('tag')
+
         const tag = textbox.value
         const message = {pluginMessage: {type: 'tag', tag}}
         parent.postMessage(message, '*')
