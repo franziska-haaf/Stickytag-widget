@@ -1,18 +1,26 @@
 // This is a counter widget with buttons to increment and decrement the number.
 
 const {widget} = figma
-const {useSyncedState, usePropertyMenu, AutoLayout, Text, useStickable, useEffect} = widget
+const {useSyncedState, usePropertyMenu, AutoLayout, Text, useStickable, useEffect, Input} = widget
 
 function Widget() {
     useStickable()
-    const [tag, setTag] = useSyncedState('Tag text', 'Enter text for tag')
+
+    const [tag, setTag] = useSyncedState('Tag text', 'Stickytag')
 
     const radiusOptions = [
-        {option: '0', label: 'None'},
-        {option: '8', label: 'Slightly'},
+        {option: '0', label: 'Rectangular'},
+        {option: '8', label: 'Rounded'},
         {option: '400', label: 'Round'}
     ]
     const [radius, setRadius] = useSyncedState('Radius', '400')
+
+    const tagLengthOptions = [
+        {option: '80', label: 'Short'},
+        {option: '140', label: 'Medium'},
+        {option: '200', label: 'Long'},
+    ]
+    const [tagLength, setTagLength] = useSyncedState('Tag length', tagLengthOptions[0].option)
 
     const colors = [
         {option: '#ffffff', tooltip: 'White'},
@@ -31,6 +39,18 @@ function Widget() {
         {option: '#000000', tooltip: 'Black'}
     ]
     const [color, setColor] = useSyncedState('Color', colors[0].option)
+
+    const fontSizes = [
+        {option: '16', label: 'Small text'},
+        {option: '24', label: 'Medium text'},
+        {option: '40', label: 'Large text'},
+    ]
+    const [fontSize, setFontSize] = useSyncedState('Font size', fontSizes[0].option)
+
+    /* Colors that are dark and should have white colored text */
+    const darkColors = [
+        '#000000', '#0D99FF', '#9747FF', '#14AE5C', '#F24822'
+    ]
 
     const emojis = [
         {option: 'None', label: 'None'},
@@ -76,9 +96,21 @@ function Widget() {
                 itemType: 'separator',
             },
             {
-                itemType: 'action',
-                tooltip: 'Edit text',
-                propertyName: 'setTagText'
+                itemType: 'dropdown',
+                propertyName: 'fontSize',
+                tooltip: 'Font size selector',
+                selectedOption: fontSize,
+                options: fontSizes,
+            },
+            {
+                itemType: 'separator',
+            },
+            {
+                itemType: 'dropdown',
+                propertyName: 'tagLength',
+                tooltip: 'Tag length selector',
+                selectedOption: tagLength,
+                options: tagLengthOptions,
             },
             {
                 itemType: 'separator',
@@ -104,20 +136,17 @@ function Widget() {
         ({propertyName, propertyValue}) => {
             if (propertyName === "emoji") {
                 setEmoji(propertyValue)
-            } else if (propertyName === "setTagText") {
-                return new Promise((resolve) => {
-                    figma.showUI(__html__);
-                    figma.ui.resize(300, 104)
-                })
-
-            } else if (propertyName === "colors") {
+            } else if (propertyName === "fontSize") {
+                setFontSize(propertyValue)
+            }else if (propertyName === "tagLength") {
+                setTagLength(propertyValue)
+            }else if (propertyName === "colors") {
                 setColor(propertyValue)
             } else if (propertyName === "radius") {
                 setRadius(propertyValue)
             }
         },
     )
-    console.log("Emoji is ", emoji)
     return (
         <AutoLayout
             verticalAlignItems={'center'}
@@ -126,14 +155,19 @@ function Widget() {
             cornerRadius={parseInt(radius)}
             fill={color}
         >
-            <Text hidden={emoji === 'None'}>
+            <Text hidden={emoji === 'None'} fontSize={parseInt(fontSize)}>
                 {emoji}
             </Text>
-            <Text
-                fill={color == '#000000' ? '#ffffff' : '#000000'}
-            >
-                {tag}
-            </Text>
+            <Input
+                value={tag}
+                placeholder="Stickytag"
+                onTextEditEnd={(e) => {
+                    setTag(e.characters);
+                }}
+                fill={darkColors.includes(color) ? '#ffffff': '#000000'}
+                width={parseInt(tagLength)}
+                fontSize={parseInt(fontSize)}
+            />
         </AutoLayout>
     )
 }
